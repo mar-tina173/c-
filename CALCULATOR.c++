@@ -1,111 +1,131 @@
 #include <iostream>
-#include <vector>
-
+#include <vector>  
+#include <string>  
 using namespace std;
 
-int main() {
+int main()
+{
     int rowsA, colsA, rowsB, colsB;
+    string input; 
+    
+   
+    cout << "Enter the number of rows and columns in the A Matriz (rows*columns): ";
+    cin >> input;
 
-    // Entrada de dimensiones para la primera matriz
-    cout << "Introduce el número de filas y columnas para la primera matriz (A): ";
-    cin >> rowsA >> colsA;
-
-    // Entrada de dimensiones para la segunda matriz
-    cout << "Introduce el número de filas y columnas para la segunda matriz (B): ";
-    cin >> rowsB >> colsB;
-
-    // Crear matrices dinámicamente
-    int** A = new int*[rowsA];
-    for (int i = 0; i < rowsA; i++) {
-        A[i] = new int[colsA];
+   
+    size_t pos = input.find('*');
+    if (pos != string::npos) 
+    {
+        rowsA = stoi(input.substr(0, pos)); 
+        colsA = stoi(input.substr(pos + 1));
+    } 
+    else
+    {
+        cout << "Invalid format! try again.";
+        return 1; 
     }
 
-    int** B = new int*[rowsB];
-    for (int i = 0; i < rowsB; i++) {
-        B[i] = new int[colsB];
+
+    cout << "Enter the number of rows and columns in the B Matriz (rows*columns): ";
+    cin >> input;
+
+   
+    pos = input.find('*');
+    if (pos != string::npos) 
+    {
+        rowsB = stoi(input.substr(0, pos));  
+        colsB = stoi(input.substr(pos + 1)); 
+    }
+    else 
+    {
+        cout << "Invalid format! try again.";
+        return 1;  
     }
 
-    // Entrada de elementos de la matriz A
-    cout << "Introduce los elementos de la matriz A (" << rowsA << "x" << colsA << "):\n";
-    for (int i = 0; i < rowsA; i++) {
-        for (int j = 0; j < colsA; j++) {
+    vector<vector<int>> A(rowsA, vector<int>(colsA)); 
+    vector<vector<int>> B(rowsB, vector<int>(colsB));  
+
+ 
+    cout << "Enter the elements of matrix A (" << rowsA << "x" << colsA << "):\n";
+    for (int i = 0; i < rowsA; i++) 
+    {
+        for (int j = 0; j < colsA; j++)
+        {
             cin >> A[i][j];
         }
     }
 
-    // Entrada de elementos de la matriz B
-    cout << "Introduce los elementos de la matriz B (" << rowsB << "x" << colsB << "):\n";
-    for (int i = 0; i < rowsB; i++) {
-        for (int j = 0; j < colsB; j++) {
+   
+    cout << "Enter the elements of matrix B (" << rowsB << "x" << colsB << "):\n";
+    for (int i = 0; i < rowsB; i++) 
+    {
+        for (int j = 0; j < colsB; j++)
+        {
             cin >> B[i][j];
         }
     }
 
-    // Comprobar si se pueden sumar y restar las matrices
-    if (rowsA == rowsB && colsA == colsB) {
-        cout << "Suma de las matrices:\n";
-        do {
-            for (int i = 0; i < rowsA; i++) {
-                for (int j = 0; j < colsA; j++) {
+  
+    do {
+        if (rowsA == rowsB && colsA == colsB)
+        {
+            cout << "Addition of matrices A and B:\n";
+            for (int i = 0; i < rowsA; i++) 
+            {
+                for (int j = 0; j < colsA; j++) 
+                {
                     cout << A[i][j] + B[i][j] << " ";
                 }
                 cout << endl;
             }
-        } while (false);  // Usamos do-while para mostrar solo una vez
+        }
+        else 
+        {
+            cout << "Addition not permitted: matrices have different dimensions.\n";
+        }
+    } while (false);
 
-        cout << "Resta de las matrices:\n";
-        do {
-            for (int i = 0; i < rowsA; i++) {
-                for (int j = 0; j < colsA; j++) {
+
+    do 
+    {
+        if (rowsA == rowsB && colsA == colsB)
+        {
+            cout << "Subtraction of matrices A and B:\n";
+            for (int i = 0; i < rowsA; i++)
+            {
+                for (int j = 0; j < colsA; j++)
+                {
                     cout << A[i][j] - B[i][j] << " ";
                 }
                 cout << endl;
             }
-        } while (false);
-    } else {
-        cout << "La suma y resta no están permitidas ya que las matrices tienen dimensiones diferentes.\n";
-    }
-
-    // Comprobar si se pueden multiplicar las matrices
-    if (colsA == rowsB) {
-        int** result = new int*[rowsA];
-        for (int i = 0; i < rowsA; i++) {
-            result[i] = new int[colsB];
+        } else {
+            cout << "Subtraction not permitted: matrices have different dimensions.\n";
         }
+    } while (false);
 
-        cout << "Multiplicación de las matrices:\n";
-        do {
-            for (int i = 0; i < rowsA; i++) {
-                for (int j = 0; j < colsB; j++) {
-                    result[i][j] = 0;  // Inicializamos el valor de la celda
-                    for (int k = 0; k < colsA; k++) {
+    do
+    {
+        if (colsA == rowsB)
+        {
+            vector<vector<int>> result(rowsA, vector<int>(colsB, 0));  
+            cout << "Multiplication of matrices A and B:\n";
+            for (int i = 0; i < rowsA; i++)
+            {
+                for (int j = 0; j < colsB; j++) 
+                {
+                    for (int k = 0; k < colsA; k++) 
+                    {
                         result[i][j] += A[i][k] * B[k][j];
                     }
                     cout << result[i][j] << " ";
                 }
                 cout << endl;
             }
-        } while (false);
-
-        // Liberar memoria de la matriz resultado
-        for (int i = 0; i < rowsA; i++) {
-            delete[] result[i];
+        } else {
+            cout << "Multiplication not permitted: number of columns of A must equal number of rows of B.\n";
         }
-        delete[] result;
-    } else {
-        cout << "La multiplicación no está permitida: el número de columnas de A debe ser igual al número de filas de B.\n";
-    }
-
-    // Liberar memoria de las matrices A y B
-    for (int i = 0; i < rowsA; i++) {
-        delete[] A[i];
-    }
-    delete[] A;
-
-    for (int i = 0; i < rowsB; i++) {
-        delete[] B[i];
-    }
-    delete[] B;
+    } while (false);
 
     return 0;
 }
